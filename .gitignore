@@ -72,6 +72,8 @@ Thumbs.db
 *.exe
 
 /release
-/out
+/out/*
+!/out/build_and_package.bat
+!/out/Package.evb
 /.vs
 /.vscode
