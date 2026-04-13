@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources/bilibili-text.png</file>
+        <file>Resources/FuckRedSpider.ico</file>
+        <file>Resources/github.png</file>
+        <file>Resources/WorldMargin.ico</file>
+        <file>Resources/WorldMargin.png</file>
+        <file>Resources/AlimamaShuHeiTi-Bold.ttf</file>
+    </qresource>
+</RCC>
