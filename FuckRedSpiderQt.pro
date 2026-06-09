@@ -1,50 +1,89 @@
 QT       += core gui widgets
 
-# The following define makes your compiler emit warnings if you use
-# any Qt feature that has been marked deprecated (the exact warnings
-# depend on your compiler). Please consult the documentation of the
-# deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-# You can also make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-# You can also select to disable deprecated APIs only up to a certain version of Qt.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+msvc {
+    QMAKE_CXXFLAGS += /utf-8
+}
+
+INCLUDEPATH += headers
 
 SOURCES += \
-    AboutPage.cpp \
-    GlobalKeyboardHookGuard.cpp \
-    Log.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    WindowsApi.cpp
+    src/main.cpp \
+    src/AboutPage.cpp \
+    src/GlobalKeyboardHookGuard.cpp \
+    src/Log.cpp \
+    src/mainwindow.cpp \
+    src/OverlayWidget.cpp \
+    src/WindowsApi.cpp \
+    src/PrivilegeHelper.cpp \
+    src/ProcessManager.cpp \
+    src/HijackManager.cpp \
+    src/HotkeyManager.cpp \
+    src/CaptureManager.cpp \
+    src/ImmersiveModeController.cpp
 
 HEADERS += \
-    AboutPage.h \
-    GlobalKeyboardHookGuard.h \
-    Log.h \
-    mainwindow.h \
-    WindowsApi.h
+    headers/AboutPage.h \
+    headers/GlobalKeyboardHookGuard.h \
+    headers/Log.h \
+    headers/mainwindow.h \
+    headers/OverlayWidget.h \
+    headers/WindowsApi.h \
+    headers/PrivilegeHelper.h \
+    headers/ProcessManager.h \
+    headers/HijackManager.h \
+    headers/HotkeyManager.h \
+    headers/CaptureManager.h \
+    headers/ImmersiveModeController.h
 
 FORMS += \
-    AboutPage.ui \
-    mainwindow.ui
-
-TRANSLATIONS += \
-    FuckRedSpiderQt_zh_CN.ts
+    forms/AboutPage.ui \
+    forms/mainwindow.ui
 
 RESOURCES += resources.qrc
 
-# 设置目标文件输出路径为bin目录
 TARGET = FuckRedSpiderQt
-DESTDIR = $$PWD/out
 
-# 部署规则
-target.path = $$PWD/out
-INSTALLS += target
+_PRO_BASE_ = $$dirname(_PRO_FILE_)
+CONFIG(debug, debug|release) {
+    DESTDIR = $$_PRO_BASE_/build/debug
+    OBJECTS_DIR = $$_PRO_BASE_/build/debug
+} else {
+    DESTDIR = $$_PRO_BASE_/build/release
+    OBJECTS_DIR = $$_PRO_BASE_/build/release
+}
 
-# 设置应用程序图标
+MOC_DIR = $$_PRO_BASE_/build
+RCC_DIR = $$_PRO_BASE_/build
+UI_DIR = $$_PRO_BASE_/build
+
+win32 {
+    !exists($$_PRO_BASE_/build) {
+        system(mkdir "$$_PRO_BASE_\\build")
+    }
+} else {
+    !exists($$_PRO_BASE_/build) {
+        system(mkdir -p "$$_PRO_BASE_/build")
+    }
+}
+
 RC_ICONS = Resources/WorldMargin.ico
 
-# 添加Windows系统库依赖
 LIBS += -lpsapi
+
+win32 {
+    static {
+        LIBS += -L$$[QT_INSTALL_PLUGINS]/platforms -lqwindows
+        DEFINES += QT_STATICPLUGIN
+        QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++
+        QMAKE_CXXFLAGS_RELEASE -= -O2
+        QMAKE_CXXFLAGS_RELEASE += -Os
+
+        # 构建前自动终止正在运行的进程（避免 Permission denied）
+        win32: QMAKE_PRE_LINK = $$quote(cmd /c "taskkill /f /IM $${TARGET}.exe >nul 2>&1" || exit 0)
+
+        STRIP_TARGET = $$shell_path($$DESTDIR/$${TARGET}.exe)
+        win32: QMAKE_POST_LINK = strip --strip-all \"$$STRIP_TARGET\"
+    }
+}

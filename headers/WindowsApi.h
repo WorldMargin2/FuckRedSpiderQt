@@ -6,19 +6,6 @@
 #include <QPoint>
 #include <QString>
 
-#define SWP_NOMOVE 0x0002
-#define SWP_NOSIZE 0x0001
-#define WM_CLOSE 0x0010
-#define SW_HIDE 0
-#define SW_MINIMIZE 6
-#define SWP_NOZORDER 0x0004
-#define SWP_NOACTIVATE 0x0010
-#define SW_SHOWMAXIMIZED 3
-#define GWL_STYLE (-16)
-#define HWND_BOTTOM ((HWND)1)
-#define HWND_NOTOPMOST ((HWND)-2)
-#define SE_DEBUG_NAME TEXT("SeDebugPrivilege")
-
 class WindowsApi
 {
 public:

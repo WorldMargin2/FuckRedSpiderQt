@@ -70,10 +70,6 @@ Thumbs.db
 # --------
 *.dll
 *.exe
-
-/release
-/out/*
-!/out/build_and_package.bat
-!/out/Package.evb
-/.vs
-/.vscode
+.vs/*
+.vscode/*
+build/*

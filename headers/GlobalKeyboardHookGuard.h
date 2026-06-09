@@ -16,7 +16,7 @@ public:
 
     bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) override;
 
-    // 匹配 C# 版的接口
+
     void start();
     void stop();
     bool isStarted() const;

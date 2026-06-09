@@ -6,5 +6,9 @@
         <file>Resources/WorldMargin.ico</file>
         <file>Resources/WorldMargin.png</file>
         <file>Resources/AlimamaShuHeiTi-Bold.ttf</file>
+        <file>Resources/cursor.png</file>
+        <file>Resources/folder.png</file>
+        <file>Resources/resize.png</file>
+        <file>Resources/move.png</file>
     </qresource>
 </RCC>
